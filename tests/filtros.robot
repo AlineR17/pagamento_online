@@ -14,42 +14,28 @@ Test Teardown   Depois do teste
 
 *** Test Cases ***
 
-Login com sucesso
-        [tags]          smoke
-        Dado que tenho os seguintes dados de acesso
-        ...     12345678909      04/05/1982
-        E acesso o portal de pagamento online
-        Quando eu informo os dados de acesso
-        Então vejo a tela de listagem de títulos
-
 Filtrar por títulos
-        Dado que estou na listagem de títulos
-        Quando eu informo o id de um título             3916
-        Então vejo na lista apenas os títulos com o id
-
-Filtrar por data de vencimento decrescente
-        Dado que estou na listagem de títulos
-        Quando eu clico no filtro "Vencimento"
-        Então vejo os títulos ordenados de forma "decrescente"
+        Dado que possuo o seguinte título       15
+        E estou na listagem de títulos
+        Quando eu informo o id de um título             
+        Então vejo na lista apenas os títulos com o id "Título: 15"
 
 Filtrar por data de vencimento crescente
         Dado que estou na listagem de títulos
-        Quando eu clico no filtro "Vencimento"
-        Então vejo os títulos ordenados de forma "crescente"
+        Quando eu seleciono a ordenação "Vencimento"
+        Então vejo os títulos ordenados de forma "↑"
+
+Filtrar por data de vencimento decrescente
+        Dado que estou na listagem de títulos
+        Quando eu clico duas vezes na ordenação "Vencimento"
+        Então vejo os títulos ordenados de forma "↓"
+
+Filtrar por valor crescente
+        Dado que estou na listagem de títulos
+        Quando eu seleciono a ordenação "Valor"
+        Então vejo os títulos ordenados de forma "↑"
 
 Filtrar por valor decrescente
         Dado que estou na listagem de títulos
-        Quando eu clico no filtro "Valor"
-        Então vejo os títulos ordenados de forma "decrescente"
-
-Filtrar por valor crescente
-        [Template]              Selecionar filtros
-        valor           crescente
-
-***Keywords***
-Selecionar filtros
-        [Arguments]     ${filtro}       ${tipo_ordenacao}
-
-        Dado que estou na listagem de títulos
-        Quando eu clico no filtro "${filtro}"
-        Então vejo os títulos ordenados de forma "${tipo_ordenacao}"
+        Quando eu clico duas vezes na ordenação "Valor"
+        Então vejo os títulos ordenados de forma "↓"
