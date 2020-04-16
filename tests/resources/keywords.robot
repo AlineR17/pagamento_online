@@ -2,9 +2,10 @@
 Resource        elements.robot
 
 *** Variables ***
-${BASE_URL}     http://pagamentogazin.sabium.info
+${BASE_URL}     http://pagamentonovalar.sabium.info/
 ##http://pagamentonovalar.sabium.info/
 ##http://pagamentomoveisbrasilia.sabium.info/
+##http://pagamentogazin.sabium.info
 
 *** Keywords ***
 
@@ -17,30 +18,49 @@ Encerra Sessao
 
 Antes do teste
         Set Selenium Implicit Wait      5
+        Set Selenium Speed              1.5s
 
 Depois do teste
         Capture Page Screenshot
 
+Dado que tenho os seguintes dados de acesso
+        [Arguments]         ${cpf}      ${data}
 
-Dado que acesso o portal de pagamento online
-        Go To               ${BASE_URL}
-        Title Should Be     ${TITULO_PAGINA} 
+        Set Test Variable         ${cpf}     
+        Set Test Variable         ${data} 
+
+E acesso o portal de pagamento online
+        Go To                                   ${BASE_URL}
+        # Title Should Be                         ${TITULO_PAGINA} 
 
 Quando eu informo os dados de acesso
-        [Arguments]         ${cpf}               ${data}
-        
-        Wait Until Element Is Visible           ${CAMPO_CPF}
-        Input Text          ${CAMPO_CPF}         ${cpf}     clear=true
-        Input Text          ${CAMPO_DATA}        ${data}    clear=true
+        Input Text                              ${CAMPO_CPF}         ${cpf}     clear=true
+        Input Text                              ${CAMPO_DATA}        ${data}    clear=true
 
-        Click Element       ${BTN_PROSSEGUIR}
+        Click Element                           ${BTN_PROSSEGUIR}
 
 Então vejo a tela de listagem de títulos
-        Wait Until Element Is Visible       ${LISTA_TITULOS}
+        Wait Until Element Is Visible           ${LISTA_TITULOS}
+        Click Element                           ${BTN_LOGOUT}
 
 Então vejo a mensagem "${mensagem_esperada}"
-        Wait Until Element Is Visible       ${ALERTA_ERRO}
-        Element Should Contain              ${ALERTA_ERRO}      ${mensagem_esperada}
+        Wait Until Element Is Visible           ${ALERTA_ERRO}
+        Element Should Contain                  ${ALERTA_ERRO}      ${mensagem_esperada}
 
 Então vejo a validação "${mensagem_validacao}"
-        Element Should Contain              ${VALIDACAO_CAMPO}      ${mensagem_validacao}
+        Element Should Contain                  ${VALIDACAO_CAMPO}      ${mensagem_validacao}
+
+Dado que estou na listagem de títulos
+        Quando eu informo os dados de acesso
+
+        Wait Until Element Is Visible           ${LISTA_TITULOS}
+        Click Element                           ${BTN_LOGOUT}
+
+Quando eu informo o id de um título
+        [Arguments]         ${idtitulo}
+
+        Input Text                              ${ID_TITULO}          ${idtitulo}
+        Press Keys                              RETURN
+
+Então vejo na lista apenas os títulos com o id
+#Título: 3916
