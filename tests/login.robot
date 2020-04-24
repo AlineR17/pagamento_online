@@ -9,58 +9,69 @@ Suite Setup     Inicia Sessao
 Suite Teardown  Encerra Sessao
 
 Test Setup      Antes do teste
-Test Teardown   Depois do teste
-
 
 *** Test Cases ***
 
 Login com sucesso
         [tags]          smoke
-        Dado que tenho os seguintes dados de acesso
-        ...     ${CPF_VALIDO}      ${DATA_VALIDA}
-        E acesso o portal de pagamento online
-        Quando eu informo os dados de acesso
-        Então vejo a tela de listagem de títulos
-
+        Go To                                   ${BASE_URL}
+        Title Should Be                         ${TITULO_PAGINA}
+        Press Keys                              ${CAMPO_CPF}                   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9
+        Input Text                              ${CAMPO_DATA}                  04051982
+        Click Element                           ${BTN_LOGIN}
+        Wait Until Element Is Visible           ${LISTA_TITULOS}
+        Click Element                           ${BTN_LOGOUT}
+        
 Login com o cpf incorreto
-        [Template]      Tentar fazer login   
-        12345678900      ${DATA_VALIDA}     CPF inválido.
+        [tags]          cpf_incorreto
+        Go To                                   ${BASE_URL}
+        Title Should Be                         ${TITULO_PAGINA}
+        Press Keys                              ${CAMPO_CPF}                   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0
+        Input Text                              ${CAMPO_DATA}                  04051982
+        Click Element                           ${BTN_LOGIN}
+        Wait Until Element Is Visible           ${ALERTA_ERRO}
+        Element Should Contain                  ${ALERTA_ERRO}                 CPF inválido.
+        
 
 Login com a data incorreta
-        [Template]      Tentar fazer login   
-        ${CPF_VALIDO}      04/05/1983     Data incorreta
+        [tags]          data_incorreta
+        Go To                                   ${BASE_URL}
+        Title Should Be                         ${TITULO_PAGINA}
+        Press Keys                              ${CAMPO_CPF}                   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9
+        Input Text                              ${CAMPO_DATA}                  04051983
+        Click Element                           ${BTN_LOGIN}
+        Wait Until Element Is Visible           ${ALERTA_ERRO}
+        Element Should Contain                  ${ALERTA_ERRO}                 Data incorreta
         
 Login com o cpf em branco
-        [Template]      Tentar fazer login em branco   
-        ${EMPTY}      ${DATA_VALIDA}     Preencha o CPF
+        [tags]          cpf_branco
+        Go To                                   ${BASE_URL}
+        Title Should Be                         ${TITULO_PAGINA}
+        Input Text                              ${CAMPO_CPF}                   ${EMPTY}
+        Input Text                              ${CAMPO_DATA}                  04051982
+        Click Element                           ${BTN_LOGIN}
+        Wait Until Element Is Visible           ${VALIDACAO_CAMPO}
+        Element Should Contain                  ${VALIDACAO_CAMPO}             Preencha o CPF
 
 Login com a data em branco
-        [tags]          bug
-        [Template]      Tentar fazer login em branco   
-        ${CPF_VALIDO}      ${EMPTY}     Preencha a data de nascimento
+        [tags]          data_branco
+        Go To                                   ${BASE_URL}
+        Title Should Be                         ${TITULO_PAGINA}
+        Press Keys                              ${CAMPO_CPF}                   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9
+        Input Text                              ${CAMPO_DATA}                  ${EMPTY}
+        Click Element                           ${BTN_LOGIN}
+        Wait Until Element Is Visible           ${VALIDACAO_CAMPO}
+        Element Should Contain                  ${VALIDACAO_CAMPO}             Preencha a data de nascimento
 
 # Login com timeout
-#         [Template]      Tentar fazer login   
-#         ${CPF_VALIDO}      ${DATA_VALIDA}     Erro ao conectar com banco de dados
+#        # [tags]          timeout
+        # Go To                                   ${BASE_URL}
+        # Title Should Be                         ${TITULO_PAGINA}
+        # Press Keys                              ${CAMPO_CPF}                   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9
+        # Input Text                              ${CAMPO_DATA}                  04051982
+        # Click Element                           ${BTN_LOGIN}
+        # Wait Until Element Is Visible           ${ALERTA_ERRO}
+        # Element Should Contain                  ${ALERTA_ERRO}                 Erro ao conectar com banco de dados   
 
-***Keywords***
-Tentar fazer login
-        [Arguments]     ${cpf}          ${dt_nasc}      ${texto}
-
-        Dado que tenho os seguintes dados de acesso
-        ...     ${cpf}      ${dt_nasc}
-        E acesso o portal de pagamento online
-        Quando eu informo os dados de acesso
-        Então vejo a mensagem "${texto}"
-
-***Keywords***
-Tentar fazer login em branco
-        [Arguments]     ${cpf}          ${dt_nasc}      ${texto}
-
-        Dado que tenho os seguintes dados de acesso
-        ...     ${cpf}      ${dt_nasc}
-        E acesso o portal de pagamento online
-        Quando eu informo os dados de acesso
-        Então vejo a validação "${texto}"
 
 

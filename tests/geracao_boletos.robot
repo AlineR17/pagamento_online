@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Acessar pagamento online
+Documentation   Gerar boleto no pagamento online
 
 Library         SeleniumLibrary
 
@@ -13,31 +13,25 @@ Test Teardown   Depois do teste
 
 
 *** Test Cases ***
-
-Login com sucesso
-        [tags]          smoke
-        Dado que tenho os seguintes dados de acesso
-        ...     ${CPF_VALIDO}      ${DATA_VALIDA}
-        E acesso o portal de pagamento online
-        Quando eu informo os dados de acesso
-        Então vejo a tela de listagem de títulos
-
 Selecionar títulos para geração de boleto
+        [tags]          smoke
         Dado que estou na listagem de títulos
-        E seleciono os títulos      a
+        E seleciono os títulos
         Quando avanço para a próxima etapa
         Então vejo a opção de impressão de boletos
 
 Limpar seleção de títulos
+        [tags]          limpar
         Dado que estou na listagem de títulos
-        E seleciono os títulos      a
+        E seleciono os títulos
         Quando clico na opção Limpar
-        Então vejo a mensagem de confirmação ""
+        Então vejo a mensagem de confirmação
         E clico em Sim
 
 Tentar limpar seleção de títulos
+        [tags]          nao_limpar
         Dado que estou na listagem de títulos
-        E seleciono os títulos      a
+        E seleciono os títulos
         Quando clico na opção Limpar
-        Então vejo a mensagem de confirmação ""
+        Então vejo a mensagem de confirmação
         E clico em Não
